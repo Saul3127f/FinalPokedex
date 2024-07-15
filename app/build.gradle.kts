@@ -72,5 +72,50 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling")
     implementation("androidx.compose.ui:ui-test-manifest")
 
-    
+    // Activity Compose
+    implementation("androidx.activity:activity-compose:1.8.2")
+
+    // Compose Lifecycles
+    val lifecycleVersion = "2.7.0"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+
+    // Testing
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation(platform("androidx.compose:compose-bom:$composeVersion"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+
+    // UI
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
+
+    // Dagger Hilt
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.48.1")
+    implementation("androidx.hilt:hilt-work:1.2.0")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    // GSON
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.google.code.gson:gson:2.10.1")
+
+    // Timber
+    implementation ("com.jakewharton.timber:timber:4.7.1")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation ("androidx.palette:palette-ktx:1.0.0")
+
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
+
+    // define a BOM and its version
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:5.0.0-alpha.7"))
+    implementation ("io.karn:khttp-android:0.1.0")
+    implementation ("com.google.accompanist:accompanist-navigation-animation:0.35.0-alpha")
 }
