@@ -1,6 +1,4 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
@@ -10,12 +8,12 @@ plugins {
 }
 
 android {
-    namespace = "com.spokefan.finalpokedex"
+    namespace = "com.pokedex"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.spokefan.finalpokedex"
-        minSdk = 24
+        applicationId = "com.pokedex"
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -36,17 +34,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
@@ -56,10 +54,10 @@ android {
 }
 
 dependencies {
-    // Core Library
+    // Core library
     implementation("androidx.core:core-ktx:1.12.0")
 
-    // Jetpack Compose
+    // Compose
     val composeVersion = "2024.03.00"
     implementation(platform("androidx.compose:compose-bom:$composeVersion"))
     implementation("androidx.compose.runtime:runtime")
@@ -69,8 +67,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3:1.2.1")
-    implementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.compose.ui:ui-test-manifest")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // Activity Compose
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -88,7 +86,7 @@ dependencies {
     androidTestImplementation(platform("androidx.compose:compose-bom:$composeVersion"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
-    // UI
+    // System UI controller
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
 
     // Dagger Hilt
@@ -108,6 +106,7 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
+
     implementation ("androidx.palette:palette-ktx:1.0.0")
 
     // define any required OkHttp artifacts without version
@@ -117,5 +116,6 @@ dependencies {
     // define a BOM and its version
     implementation(platform("com.squareup.okhttp3:okhttp-bom:5.0.0-alpha.7"))
     implementation ("io.karn:khttp-android:0.1.0")
+
     implementation ("com.google.accompanist:accompanist-navigation-animation:0.35.0-alpha")
 }
