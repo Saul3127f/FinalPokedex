@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +26,58 @@ import androidx.compose.ui.unit.sp
 import com.spokefan.finalpokedex.domain.model.PokemonDetails
 import com.pokedex.R
 import com.spokefan.finalpokedex.ui.theme.interFont
+import com.spokefan.finalpokedex.ui.theme.sfProFont
+import com.spokefan.finalpokedex.util.parseTypeToColor
 
+
+@Composable
+fun PokemonDetailsContent(
+    pokemonDetails: PokemonDetails
+) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        PokemonTypesSection(types = pokemonDetails.type)
+        PokemonDetailsRow(pokemonDetails = pokemonDetails)
+        PokemonDescriptionSection(flavorText = pokemonDetails.flavorText)
+    }
+}
+@Composable
+fun PokemonTypesSection(
+    types: List<String?>
+) {
+    Row(
+        modifier = Modifier
+            .padding(start = if (types.size == 1) 20.dp else 10.dp)
+            .padding(top = 30.dp)
+            .fillMaxWidth()
+            .height(32.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(
+            space = 11.dp,
+            alignment = Alignment.CenterHorizontally
+        )
+    ) {
+        for (type in types) {
+            Box(
+                modifier = Modifier
+                    .width(96.dp)
+                    .height(30.dp)
+                    .background(color = parseTypeToColor(type!!), shape = CircleShape)
+                    .align(Alignment.CenterVertically),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = type.uppercase(),
+                    color = Color.White,
+                    fontFamily = sfProFont,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp
+                )
+            }
+        }
+    }
+}
 
 @Composable
 private fun PokemonDetailsRow(
