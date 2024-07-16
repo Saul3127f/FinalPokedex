@@ -18,6 +18,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.spokefan.finalpokedex.presentation.filterPokemons.FilterScreen
 import com.spokefan.finalpokedex.presentation.pokemonDetails.PokemonDetailsScreen
 
 @Composable
