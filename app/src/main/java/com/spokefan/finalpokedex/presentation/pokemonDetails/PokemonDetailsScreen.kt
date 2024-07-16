@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pokedex.R
+import com.spokefan.finalpokedex.ui.theme.interFont
 
 
 @Composable
