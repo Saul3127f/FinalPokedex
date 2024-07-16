@@ -1,6 +1,7 @@
 package com.spokefan.finalpokedex.di
 
 import com.spokefan.finalpokedex.data.remote.PokeApi
+import com.spokefan.finalpokedex.data.repository.PokemonRepositoryImpl
 import com.spokefan.finalpokedex.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
