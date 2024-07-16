@@ -5,6 +5,30 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.pokedex.R
+
+// Set of Material typography styles to start with
+val clashDisplayFont = FontFamily(
+    Font(R.font.clash_display_light, FontWeight.Light),
+    Font(R.font.clash_display_regular, FontWeight.Normal),
+    Font(R.font.clash_display_medium, FontWeight.Medium),
+    Font(R.font.clash_display_semibold, FontWeight.SemiBold),
+    Font(R.font.clash_display_bold, FontWeight.Bold)
+)
+
+val interFont = FontFamily(
+    Font(R.font.inter_light, FontWeight.Light),
+    Font(R.font.inter_regular, FontWeight.Normal),
+    Font(R.font.inter_medium, FontWeight.Medium),
+    Font(R.font.inter_semi_bold, FontWeight.SemiBold),
+    Font(R.font.inter_bold, FontWeight.Bold)
+)
+
+val sfProFont = FontFamily(
+    Font(R.font.sf_pro_regular, FontWeight.Normal),
+    Font(R.font.sf_pro_medium, FontWeight.Medium),
+    Font(R.font.sf_pro_bold, FontWeight.Bold)
+)
 
 // Set of Material typography styles to start with
 val Typography = Typography(
