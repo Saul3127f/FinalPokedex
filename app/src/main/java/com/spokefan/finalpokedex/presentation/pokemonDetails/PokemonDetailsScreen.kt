@@ -1,6 +1,7 @@
 package com.spokefan.finalpokedex.presentation.pokemonDetails
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,26 +11,215 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import androidx.core.graphics.ColorUtils
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import com.spokefan.finalpokedex.domain.model.PokemonDetails
 import com.pokedex.R
+import com.spokefan.finalpokedex.ui.theme.clashDisplayFont
 import com.spokefan.finalpokedex.ui.theme.interFont
 import com.spokefan.finalpokedex.ui.theme.sfProFont
 import com.spokefan.finalpokedex.util.parseTypeToColor
+import java.util.Locale
 
+@Composable
+fun PokemonDetailsScreen(
+    onNavigate: (String) -> Unit,
+    onColorChange: (Color) -> Unit,
+    viewModel: PokemonDetailsViewModel = hiltViewModel()
+) {
+    val state by viewModel.pokemonDetailsState.collectAsStateWithLifecycle()
+    val pokemonDetails = state.pokemon
 
+    var offsetX by remember { mutableFloatStateOf(0f) }
+    val swipeThreshold = (LocalContext.current.resources.displayMetrics.widthPixels * 0.1).toFloat()
+
+    if (state.isLoading) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 60.dp)
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(95.dp),
+                color = Color(0xFFE4A121),
+                strokeWidth = 5.dp
+            )
+        }
+    } else {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .background(Color.Transparent)
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDragStart = {
+                        offsetX = 0f
+                    },
+                    onDrag = { change, dragAmount ->
+                        change.consume()
+
+                        val (x) = dragAmount
+                        when {
+                            x > 0 -> {
+                                offsetX += dragAmount.x
+                                if (offsetX > swipeThreshold) {
+                                    onNavigate("previous")
+                                    offsetX = 0f
+                                }
+                            }
+
+                            x < 0 -> {
+                                offsetX += dragAmount.x
+                                if (offsetX < -swipeThreshold) {
+                                    onNavigate("next")
+                                    offsetX = 0f
+                                }
+                            }
+                        }
+                    }
+                )
+            }
+        ) {
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = pokemonDetails.name.replaceFirstChar { char ->
+                            if (char.isLowerCase()) char.titlecase(Locale.ROOT) else char.toString()
+                        },
+                        color = Color.Black,
+                        fontFamily = sfProFont,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 28.sp
+                    )
+
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = pokemonDetails.id.toString().padStart(3, '0'),
+                            color = Color.White,
+                            fontFamily = clashDisplayFont,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 115.sp,
+                            style = TextStyle(
+                                shadow = Shadow(
+                                    color = Color.Gray,
+                                    offset = Offset(x = 2f, y = 3f),
+                                    blurRadius = 0.8f
+                                )
+                            ),
+                            modifier = Modifier
+                                .alpha(0.9f)
+                                .align(Alignment.TopCenter)
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 81.dp)
+                                .fillMaxSize()
+                                .zIndex(-1f),
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.pokeball_bg),
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .padding(top = 54.dp)
+                                    .fillMaxWidth()
+                                    .height(263.dp)
+                                    .alpha(0.7f)
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 82.dp)
+                                .fillMaxSize()
+                                .zIndex(2f),
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+
+                            SubcomposeAsyncImage(
+                                modifier = Modifier
+                                    .padding(top = 15.dp)
+                                    .size(259.dp)
+                                    .align(Alignment.TopCenter),
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(pokemonDetails.imageUrl)
+                                    .build(),
+                                contentDescription = null,
+                                onSuccess = {
+                                    viewModel.calcDominantColor(it.result.drawable) { color, _ ->
+                                        val softerColor = ColorUtils.blendARGB(color.toArgb(), Color.White.toArgb(), 0.3f)
+                                        onColorChange(Color(softerColor))
+                                    }
+                                }
+                            )
+                        }
+
+                        Box(
+                            contentAlignment = Alignment.BottomCenter,
+                            modifier = Modifier
+                                .padding(top = 332.dp)
+                                .matchParentSize()
+                                .background(
+                                    Color.White,
+                                    RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                                )
+                                .zIndex(0f)
+                        ) {
+                            PokemonDetailsContent(pokemonDetails)
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+}
 @Composable
 fun PokemonDetailsContent(
     pokemonDetails: PokemonDetails
