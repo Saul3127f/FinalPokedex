@@ -3,6 +3,7 @@ package com.spokefan.finalpokedex.data.mapper
 import com.spokefan.finalpokedex.data.remote.responses.PokemonResponse
 import com.spokefan.finalpokedex.data.remote.responses.PokemonSpeciesResponse
 import com.spokefan.finalpokedex.domain.model.PokemonDetails
+import com.spokefan.finalpokedex.util.getPokemonImage
 
 object PokemonDetailsMapper {
     fun buildFrom(
