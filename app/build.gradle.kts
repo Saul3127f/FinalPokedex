@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.pokedex"
+    namespace = "com.spokefan.finalpokedex"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.pokedex"
+        applicationId = "com.spokefan.finalpokedex"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
@@ -98,8 +98,8 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // GSON
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.code.gson:gson:2.10.1")
 
     // Timber
     implementation ("com.jakewharton.timber:timber:4.7.1")
@@ -115,7 +115,7 @@ dependencies {
 
     // define a BOM and its version
     implementation(platform("com.squareup.okhttp3:okhttp-bom:5.0.0-alpha.7"))
-    implementation ("io.karn:khttp-android:0.1.0")
+    implementation("io.karn:khttp-android:0.1.0")
 
-    implementation ("com.google.accompanist:accompanist-navigation-animation:0.35.0-alpha")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.35.0-alpha")
 }
