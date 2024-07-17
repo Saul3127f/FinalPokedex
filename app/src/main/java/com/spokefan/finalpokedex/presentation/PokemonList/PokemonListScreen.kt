@@ -6,28 +6,66 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.graphics.ColorUtils
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
+import com.pokedex.R
+import com.spokefan.finalpokedex.navigation.Screen
+import com.spokefan.finalpokedex.presentation.PokemonList.components.LoadingAnimation
+import com.spokefan.finalpokedex.presentation.PokemonList.components.RetrySection
+import com.spokefan.finalpokedex.presentation.filterPokemons.Filter
+import com.spokefan.finalpokedex.presentation.filterPokemons.typeFilterList
+import com.spokefan.finalpokedex.ui.theme.clashDisplayFont
+import com.spokefan.finalpokedex.ui.theme.sfProFont
+import com.spokefan.finalpokedex.ui.theme.interFont
+import com.spokefan.finalpokedex.util.parseTypeToColor
+import com.spokefan.finalpokedex.util.parseTypeToDrawable
+import java.util.Locale
+import com.spokefan.finalpokedex.domain.model.Pokemon
 
 @Composable
 fun PokemonListScreen(
@@ -100,6 +138,7 @@ fun PokemonListScreen(
         }
     }
 }
+
 @Composable
 private fun PokemonListSection(
     modifier: Modifier = Modifier,
@@ -187,5 +226,221 @@ private fun PokemonListSection(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun PokemonItem(
+    item: Pokemon,
+    onItemClick: (String, Color) -> Unit,
+    viewModel: PokemonListViewModel = hiltViewModel(),
+) {
+    val defaultColor = Color.Gray
+
+    var dominantColor by remember { mutableStateOf(defaultColor) }
+    var dominantDarkerColor by remember { mutableStateOf(defaultColor) }
+
+    val softerColor = ColorUtils.blendARGB(dominantColor.toArgb(), Color.White.toArgb(), 0.3f)
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(Color(softerColor))
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                onItemClick(item.id, Color(softerColor))
+            }
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
+                Box(
+                    modifier = Modifier.padding(vertical = 11.dp, horizontal = 8.dp)
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.SpaceAround
+                    ) {
+                        Text(
+                            text = item.id.padStart(3, '0'),
+                            color = dominantDarkerColor,
+                            fontFamily = clashDisplayFont,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 25.sp
+                        )
+                        Box(
+                            modifier = Modifier
+                                .padding(bottom = 5.dp)
+                                .fillMaxWidth()
+                                .height(20.dp),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            val modifiedName = item.name.replaceFirstChar { char ->
+                                if (char.isLowerCase()) char.titlecase(Locale.ROOT) else char.toString()
+                            }
+
+                            val formattedName = if (modifiedName.length > 10) {
+                                modifiedName.take(8) + "..."
+                            } else {
+                                modifiedName
+                            }
+
+                            Text(
+                                text = formattedName,
+                                color = Color.Black,
+                                style = TextStyle(
+                                    fontFamily = sfProFont,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 15.5.sp
+                                )
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(5.dp)
+                        ) {
+                            for(type in item.type) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(17.dp)
+                                        .clip(CircleShape)
+                                        .background(parseTypeToColor(type!!)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = parseTypeToDrawable(type)),
+                                        contentDescription = type,
+                                        modifier = Modifier.size(10.5.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    SubcomposeAsyncImage(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(95.dp)
+                            .align(Alignment.CenterEnd),
+                        contentScale = ContentScale.Crop,
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(item.imageUrl)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = item.name,
+                        onSuccess = {
+                            viewModel.calcDominantColor(it.result.drawable) { color, darkerColor ->
+                                dominantColor = color
+                                dominantDarkerColor = darkerColor
+                            }
+                        },
+                        loading = {
+                            LoadingAnimation()
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TypeBarSection(
+    type: Filter,
+    onColorChange: (Color) -> Unit
+) {
+    val colorId = ColorUtils.blendARGB(parseTypeToColor(type.name).toArgb(), Color.White.toArgb(), 0.7f)
+    onColorChange(Color(colorId))
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(134.dp)
+            .background(Color.Transparent)
+            .padding(bottom = 18.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            space = 16.dp,
+            alignment = Alignment.CenterVertically
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .size(43.dp)
+                .clip(CircleShape)
+                .background(parseTypeToColor(type.name)),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = parseTypeToDrawable(type.name)),
+                contentDescription = null,
+                modifier = Modifier.size(26.dp)
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .width(110.dp)
+                .height(36.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(parseTypeToColor(type.name)),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = type.name.uppercase(),
+                color = Color.White,
+                fontFamily = interFont,
+                fontWeight = FontWeight.Medium,
+                fontSize = 17.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun EmptyPokemonList(
+    modifier: Modifier
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .then(modifier)
+            .padding(bottom = 150.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            space = 22.dp,
+            alignment = Alignment.CenterVertically
+        )
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.no_pokemons),
+            contentDescription = null,
+            modifier = Modifier.size(200.dp)
+        )
+        Text(
+            text = "No Pokemons Found!",
+            color = Color.Black,
+            fontFamily = sfProFont,
+            fontWeight = FontWeight.Medium,
+            fontSize = 17.sp
+        )
     }
 }
