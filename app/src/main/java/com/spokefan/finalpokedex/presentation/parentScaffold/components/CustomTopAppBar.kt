@@ -33,7 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.pokedex.R
+import com.spokefan.finalpokedex.R
 import kotlinx.coroutines.delay
 
 @Composable

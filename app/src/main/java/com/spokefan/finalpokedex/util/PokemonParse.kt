@@ -1,7 +1,7 @@
 package com.spokefan.finalpokedex.util
 
 import androidx.compose.ui.graphics.Color
-import com.pokedex.R
+import com.spokefan.finalpokedex.R
 import com.spokefan.finalpokedex.ui.theme.Bug
 import com.spokefan.finalpokedex.ui.theme.Dark
 import com.spokefan.finalpokedex.ui.theme.Dragon

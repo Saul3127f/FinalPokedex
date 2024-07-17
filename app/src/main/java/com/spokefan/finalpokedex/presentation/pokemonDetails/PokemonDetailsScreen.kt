@@ -45,7 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.spokefan.finalpokedex.domain.model.PokemonDetails
-import com.pokedex.R
+import com.spokefan.finalpokedex.R
 import com.spokefan.finalpokedex.ui.theme.clashDisplayFont
 import com.spokefan.finalpokedex.ui.theme.interFont
 import com.spokefan.finalpokedex.ui.theme.sfProFont

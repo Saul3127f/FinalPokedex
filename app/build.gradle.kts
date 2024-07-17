@@ -12,7 +12,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.spokefan.finalpokedex"
+        applicationId = "com.spokeman.finalpokedex"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
@@ -115,7 +115,7 @@ dependencies {
 
     // define a BOM and its version
     implementation(platform("com.squareup.okhttp3:okhttp-bom:5.0.0-alpha.7"))
-    implementation("io.karn:khttp-android:0.1.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     implementation("com.google.accompanist:accompanist-navigation-animation:0.35.0-alpha")
 }

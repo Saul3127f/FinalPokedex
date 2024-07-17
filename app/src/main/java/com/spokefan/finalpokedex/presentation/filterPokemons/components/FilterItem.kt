@@ -23,7 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.pokedex.R
+import com.spokefan.finalpokedex.R
 import com.spokefan.finalpokedex.presentation.filterPokemons.Filter
 import com.spokefan.finalpokedex.ui.theme.sfProFont
 import com.spokefan.finalpokedex.util.parseTypeToColor

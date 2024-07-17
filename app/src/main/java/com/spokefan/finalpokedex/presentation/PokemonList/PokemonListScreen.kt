@@ -53,7 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.pokedex.R
+import com.spokefan.finalpokedex.R
 import com.spokefan.finalpokedex.navigation.Screen
 import com.spokefan.finalpokedex.presentation.PokemonList.components.LoadingAnimation
 import com.spokefan.finalpokedex.presentation.PokemonList.components.RetrySection

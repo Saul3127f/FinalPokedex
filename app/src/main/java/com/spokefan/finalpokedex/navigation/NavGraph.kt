@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.spokefan.finalpokedex.presentation.filterPokemons.FilterScreen
 import com.spokefan.finalpokedex.presentation.pokemonDetails.PokemonDetailsScreen
+import com.spokefan.finalpokedex.presentation.PokemonList.PokemonListScreen
 
 @Composable
 fun NavGraph(

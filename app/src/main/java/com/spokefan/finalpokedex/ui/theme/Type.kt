@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.pokedex.R
+import com.spokefan.finalpokedex.R
 
 // Set of Material typography styles to start with
 val clashDisplayFont = FontFamily(
